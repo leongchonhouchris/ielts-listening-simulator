@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IELTS Listening – Admin Panel</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Loading overlay -->
+  <div class="spinner-overlay" id="loading">
+    <div class="spinner"></div>
+    <div style="color:#555;font-size:0.95rem;">Loading…</div>
+  </div>
+
+  <!-- ── PASSWORD GATE ─────────────────────────────────────── -->
+  <div id="password-gate" class="hidden" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg-page);">
+    <div class="modal" style="max-width:360px;text-align:center;">
+      <h2 style="color:var(--brand-dark);margin-bottom:10px;">Admin Login</h2>
+      <p style="margin-bottom:20px;">IELTS Listening Practice</p>
+      <div class="form-group" style="text-align:left;">
+        <label for="pw-input">Password</label>
+        <input type="password" id="pw-input" style="width:100%;padding:8px 12px;border:1.5px solid #ccc;border-radius:4px;font-size:0.92rem;" placeholder="Enter admin password" />
+      </div>
+      <div id="pw-error" class="hidden" style="color:var(--accent);font-size:0.85rem;margin-bottom:10px;">Incorrect password. Please try again.</div>
+      <button class="btn btn-primary" id="pw-submit" style="width:100%;">Log In</button>
+    </div>
+  </div>
+
+  <!-- ── ADMIN PANEL ────────────────────────────────────────── -->
+  <div id="admin-page" class="hidden">
+
+    <header class="admin-header">
+      <div class="logo">IELTS <span>Listening</span> — Admin</div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <a href="index.html" class="btn btn-ghost btn-sm" style="color:#cce0ff;border-color:#7db8f7;">Student View</a>
+        <button class="btn btn-ghost btn-sm" id="btn-settings" style="color:#cce0ff;border-color:#7db8f7;">Settings</button>
+        <button class="btn btn-ghost btn-sm" id="btn-logout" style="color:#cce0ff;border-color:#7db8f7;">Log Out</button>
+      </div>
+    </header>
+
+    <div class="admin-body">
+
+      <!-- Tab bar -->
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="tests">Tests</button>
+        <button class="tab-btn"        data-tab="live">Live Control</button>
+        <button class="tab-btn"        data-tab="results">Results</button>
+        <button class="tab-btn"        data-tab="settings">Settings</button>
+      </div>
+
+      <!-- ── TESTS TAB ────────────────────────────────────── -->
+      <div id="tab-tests">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+          <h2 style="margin:0;">Manage Tests</h2>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm" id="btn-import-json">Import JSON</button>
+            <button class="btn btn-ghost btn-sm" id="btn-download-template">Download Template</button>
+            <button class="btn btn-primary btn-sm" id="btn-new-test">+ New Test</button>
+          </div>
+        </div>
+
+        <div id="test-list"></div>
+        <div class="empty-state hidden" id="admin-empty">
+          <p>No tests yet. Create one with the button above, or import a JSON file.</p>
+        </div>
+      </div>
+
+      <!-- ── TEST EDITOR (hidden until opened) ───────────── -->
+      <div id="test-editor" class="hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+          <h2 id="editor-heading" style="margin:0;">New Test</h2>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm" id="btn-back-to-list">← Back to List</button>
+            <button class="btn btn-danger btn-sm hidden" id="btn-delete-test">Delete Test</button>
+            <button class="btn btn-primary btn-sm" id="btn-save-test">Save Test</button>
+          </div>
+        </div>
+        <div id="save-msg" class="hidden" style="font-size:0.88rem;margin-bottom:12px;"></div>
+
+        <div class="admin-form">
+          <h3>Test Details</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+            <div class="form-group" style="margin:0;grid-column:1/3;">
+              <label>Test Title</label>
+              <input type="text" id="ed-title" placeholder="e.g. IELTS Academic Listening – Practice Test 1" />
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label>Time Limit (minutes)</label>
+              <input type="number" id="ed-timelimit" value="30" min="1" max="120" />
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label>Audio Mode</label>
+              <select id="ed-audio-mode">
+                <option value="teacher">Teacher plays audio (room speaker)</option>
+                <option value="browser">In-browser audio (upload URL)</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0;grid-column:1/3;" id="audio-url-group">
+              <label>Audio File URL</label>
+              <input type="url" id="ed-audio-url" placeholder="https://…/ielts_listening_test1.mp3" />
+              <div class="form-hint">Direct link to the MP3 file. See SETUP.md for hosting instructions.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sections editor -->
+        <div class="admin-form" style="margin-top:20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <h3 style="margin:0;">Sections &amp; Questions</h3>
+            <button class="btn btn-ghost btn-sm" id="btn-add-section">+ Add Section</button>
+          </div>
+          <div id="sections-editor"></div>
+        </div>
+
+        <!-- Save / cancel -->
+        <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end;">
+          <button class="btn btn-ghost" id="btn-cancel-edit">Cancel</button>
+          <button class="btn btn-primary" id="btn-save-test-bottom">Save Test</button>
+        </div>
+        <div id="save-msg-bottom" class="hidden" style="font-size:0.88rem;margin-top:10px;text-align:right;"></div>
+      </div>
+
+      <!-- ── LIVE CONTROL TAB ───────────────────────────── -->
+      <div id="tab-live" class="hidden">
+        <h2>Live Control — Teacher Play Mode</h2>
+        <p style="color:var(--text-muted);font-size:0.92rem;margin-bottom:24px;">
+          Use this panel when students are taking a test and you are playing the audio via room speaker.
+          After the audio ends, click the button below to start the 2-minute transfer/checking phase on all students' screens simultaneously.
+        </p>
+
+        <div class="live-control-panel" id="live-control-area">
+          <h3>Select the active test</h3>
+          <div class="form-group" style="max-width:480px;">
+            <label for="live-test-select">Test</label>
+            <select id="live-test-select">
+              <option value="">— Select a test —</option>
+            </select>
+          </div>
+          <div class="live-control-actions">
+            <button class="btn btn-primary" id="btn-start-transfer">Start 2-min Transfer Time</button>
+            <button class="btn btn-danger"  id="btn-force-submit">Force Submit All</button>
+          </div>
+          <div id="live-msg" class="hidden" style="font-size:0.88rem;margin-top:12px;"></div>
+          <p style="font-size:0.82rem;color:#7c5400;margin-top:14px;">
+            <strong>Force Submit All</strong> — immediately submits all students' tests regardless of whether the transfer phase has ended.
+            Use only if necessary.
+          </p>
+        </div>
+      </div>
+
+      <!-- ── RESULTS TAB ────────────────────────────────── -->
+      <div id="tab-results" class="hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+          <h2 style="margin:0;">Student Results</h2>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm" id="btn-refresh-results">Refresh</button>
+            <button class="btn btn-ghost btn-sm" id="btn-export-csv">Export CSV</button>
+          </div>
+        </div>
+
+        <div class="results-filter-bar">
+          <select id="filter-test"  style="padding:6px 10px;border:1.5px solid #ccc;border-radius:4px;font-size:0.88rem;"><option value="">All Tests</option></select>
+          <select id="filter-class" style="padding:6px 10px;border:1.5px solid #ccc;border-radius:4px;font-size:0.88rem;"><option value="">All Classes</option></select>
+          <input type="text" id="filter-name" placeholder="Search name…" style="padding:6px 10px;border:1.5px solid #ccc;border-radius:4px;font-size:0.88rem;max-width:200px;" />
+          <button class="btn btn-ghost btn-sm" id="btn-clear-filters">Clear</button>
+        </div>
+
+        <div class="results-summary" id="results-summary"></div>
+
+        <div style="overflow-x:auto;">
+          <table class="results-dash-table">
+            <thead><tr>
+              <th style="width:36px;"></th>
+              <th>Name</th><th>Class</th><th>Test</th>
+              <th>Date &amp; Time</th><th>Time Taken</th>
+              <th>Score</th><th>Band</th><th></th>
+            </tr></thead>
+            <tbody id="results-tbody-admin"></tbody>
+          </table>
+        </div>
+        <div class="empty-state hidden" id="results-empty"><p>No results yet.</p></div>
+      </div>
+
+      <!-- ── SETTINGS TAB ───────────────────────────────── -->
+      <div id="tab-settings" class="hidden">
+        <h2>Settings</h2>
+
+        <div class="admin-form">
+          <h3>Class List</h3>
+          <div class="form-group">
+            <label for="class-list-input">Classes (comma-separated)</label>
+            <input type="text" id="class-list-input" placeholder="S3C, S5B, S6A" />
+            <div class="form-hint">These appear in the class dropdown on the student entry screen.</div>
+          </div>
+          <button class="btn btn-primary btn-sm" id="btn-save-classes">Save Class List</button>
+          <span id="class-save-msg" class="hidden" style="font-size:0.85rem;margin-left:12px;"></span>
+        </div>
+
+        <div class="admin-form" style="margin-top:20px;">
+          <h3>Change Admin Password</h3>
+          <div class="form-group">
+            <label for="new-password">New Password</label>
+            <input type="password" id="new-password" />
+          </div>
+          <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" />
+          </div>
+          <button class="btn btn-primary btn-sm" id="btn-save-password">Update Password</button>
+          <span id="pw-save-msg" class="hidden" style="font-size:0.85rem;margin-left:12px;"></span>
+        </div>
+      </div>
+
+    </div><!-- /admin-body -->
+  </div><!-- /admin-page -->
+
+  <!-- ── IMPORT JSON MODAL ──────────────────────────────────── -->
+  <div class="modal-overlay hidden" id="import-modal">
+    <div class="modal" style="max-width:600px;">
+      <h2>Import Test from JSON</h2>
+      <p>Paste your test JSON below or upload a .json file. See AUDIO-GUIDE.md for the data format.</p>
+      <div style="margin-bottom:10px;display:flex;gap:8px;flex-wrap:wrap;">
+        <input type="file" id="import-file-input" accept=".json" style="font-size:0.85rem;" />
+        <button class="btn btn-ghost btn-sm" id="btn-format-json">Format JSON</button>
+      </div>
+      <textarea id="import-json-textarea" style="width:100%;height:220px;border:1.5px solid #ccc;border-radius:4px;font-size:0.8rem;font-family:monospace;padding:10px;resize:vertical;" placeholder='{ "title": "...", "sections": [...] }'></textarea>
+      <div id="import-error"   class="hidden" style="color:var(--accent);font-size:0.82rem;white-space:pre-wrap;margin-top:8px;"></div>
+      <div id="import-success" class="hidden" style="color:#218838;font-size:0.82rem;margin-top:8px;"></div>
+      <div class="modal-actions" style="margin-top:16px;">
+        <button class="btn btn-ghost" id="import-cancel">Cancel</button>
+        <button class="btn btn-primary" id="import-confirm">Import &amp; Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DELETE TEST MODAL ──────────────────────────────────── -->
+  <div class="modal-overlay hidden" id="delete-modal">
+    <div class="modal" style="max-width:380px;">
+      <h2>Delete Test</h2>
+      <p>Are you sure you want to permanently delete this test? This cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="del-cancel">Cancel</button>
+        <button class="btn btn-danger" id="del-confirm">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DELETE RESULT MODAL ───────────────────────────────── -->
+  <div class="modal-overlay hidden" id="delete-result-modal">
+    <div class="modal" style="max-width:380px;">
+      <h2>Delete Result</h2>
+      <p>Are you sure you want to permanently delete this student result?</p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="del-result-cancel">Cancel</button>
+        <button class="btn btn-danger" id="del-result-confirm">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>
