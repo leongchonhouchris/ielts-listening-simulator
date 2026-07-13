@@ -343,23 +343,26 @@ a:hover { text-decoration: underline; }
 .review-cell.flagged     { background: #fff3cd; border-color: #e6a500; color: #8a6300; }
 .review-cell.ans-flagged { background: #b8d4f8; border-color: var(--brand-mid); color: var(--brand-dark); }
 
-/* ── TRANSFER TIME OVERLAY ───────────────────────────────── */
+/* ── TRANSFER TIME BANNER ────────────────────────────────── */
 #transfer-overlay {
-  position: fixed; inset: 0; background: rgba(0,20,60,0.88);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  z-index: 7000; text-align: center; padding: 30px;
+  position: fixed; top: 0; left: 0; right: 0;
+  background: var(--transfer-bg);
+  display: flex; flex-direction: row; flex-wrap: wrap;
+  align-items: center; justify-content: center; gap: 14px;
+  z-index: 8000; padding: 10px 24px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.35);
 }
-#transfer-overlay h2 { font-size: 1.5rem; color: #fff; margin-bottom: 10px; }
-#transfer-overlay p  { font-size: 1rem; color: #aaccff; margin-bottom: 28px; line-height: 1.6; }
+#transfer-label {
+  font-size: 0.95rem; color: #ffd080; font-weight: 500;
+}
 #transfer-countdown {
-  font-size: 4rem; font-weight: 700; color: #fff;
+  font-size: 1.4rem; font-weight: 700; color: #fff;
   font-variant-numeric: tabular-nums;
-  background: var(--transfer-bg); padding: 16px 40px; border-radius: 12px;
-  margin-bottom: 24px; animation: pulse 1s infinite;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.25); padding: 4px 16px; border-radius: 6px;
+  animation: pulse 1s infinite;
+  min-width: 72px; text-align: center;
 }
-#transfer-overlay .submit-early-btn { margin-top: 8px; }
+#transfer-overlay .submit-early-btn { margin: 0; }
 
 /* ── RESULTS PAGE ─────────────────────────────────────────── */
 #results-page {

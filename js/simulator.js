@@ -187,6 +187,9 @@ function beginTransferPhase() {
   timerDisplay.classList.add("transfer");
 
   transferOverlay.classList.remove("hidden");
+  // Push page content down so the banner doesn't overlap the topbar
+  const bannerH = transferOverlay.getBoundingClientRect().height;
+  document.body.style.paddingTop = bannerH + "px";
   updateTransferCountdown();
 
   transferInterval = setInterval(() => {
@@ -195,6 +198,7 @@ function beginTransferPhase() {
     if (transferSeconds <= 0) {
       clearInterval(transferInterval);
       transferOverlay.classList.add("hidden");
+      document.body.style.paddingTop = "";
       doSubmit();
     }
   }, 1000);
@@ -210,6 +214,7 @@ function updateTransferCountdown() {
 btnSubmitEarly.addEventListener("click", () => {
   clearInterval(transferInterval);
   transferOverlay.classList.add("hidden");
+  document.body.style.paddingTop = "";
   doSubmit();
 });
 
