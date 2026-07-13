@@ -153,12 +153,18 @@ function startSessionPolling() {
   const testId = sessionStorage.getItem("activeTestId");
   if (!testId) return;
 
+  // Record the moment polling begins so we can ignore stale Firestore signals
+  // from previous exam sittings that were never cleared.
+  const pollStartTime = Date.now();
+
   sessionPollInterval = setInterval(async () => {
     try {
       const session = await getSession(testId);
       if (!session) return;
 
       if (session.forceSubmit) {
+        const signalTime = session.forceSubmitAt?.toMillis?.() ?? 0;
+        if (signalTime < pollStartTime) return;   // stale — ignore
         clearInterval(sessionPollInterval);
         clearInterval(timerInterval);
         doSubmit();
@@ -166,6 +172,8 @@ function startSessionPolling() {
       }
 
       if (session.transferStarted && !transferActive) {
+        const signalTime = session.transferStartedAt?.toMillis?.() ?? 0;
+        if (signalTime < pollStartTime) return;   // stale — ignore
         clearInterval(sessionPollInterval);
         beginTransferPhase();
       }
