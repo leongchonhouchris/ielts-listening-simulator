@@ -110,7 +110,8 @@
 
       // Load and render tests
       try {
-        const tests = await getAllTests();
+        const allTests = await getAllTests();
+        const tests = allTests.filter(t => !t.hidden);
         loading.classList.add("hidden");
 
         if (!tests.length) { emptyState.classList.remove("hidden"); return; }

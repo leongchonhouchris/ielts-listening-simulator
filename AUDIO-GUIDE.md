@@ -1,6 +1,7 @@
 # IELTS Listening Test 1 — Audio Production Guide
 
 This document contains:
+
 1. The complete **tapescript** (all 4 sections)
 2. The **answer key**
 3. Step-by-step **audio production instructions** (ElevenLabs + Python)
@@ -10,34 +11,35 @@ This document contains:
 
 ## ANSWER KEY
 
-| Q  | Answer            | Q  | Answer               |
-|----|-------------------|----|----------------------|
-| 1  | Riverside         | 21 | A                    |
-| 2  | badminton         | 22 | B                    |
-| 3  | Thursday          | 23 | B                    |
-| 4  | 7:30              | 24 | B                    |
-| 5  | 4                 | 25 | rapid growth         |
-| 6  | KR2847            | 26 | moisture sensitivity |
-| 7  | C                 | 27 | pilot stage          |
-| 8  | B                 | 28 | 30%                  |
-| 9  | B                 | 29 | A                    |
-| 10 | C                 | 30 | B                    |
-| 11 | 1987              | 31 | systems              |
-| 12 | 340               | 32 | unconscious          |
-| 13 | otters            | 33 | information          |
-| 14 | nesting sites     | 34 | perception           |
-| 15 | 4 pm              | 35 | eliminate            |
-| 16 | Saturday          | 36 | B                    |
-| 17 | C                 | 37 | B                    |
-| 18 | E                 | 38 | B                    |
-| 19 | D                 | 39 | confirmation bias    |
-| 20 | F                 | 40 | public health        |
+| Q  | Answer        | Q  | Answer               |
+| -- | ------------- | -- | -------------------- |
+| 1  | Riverside     | 21 | A                    |
+| 2  | badminton     | 22 | B                    |
+| 3  | Thursday      | 23 | B                    |
+| 4  | 7:30          | 24 | B                    |
+| 5  | 4             | 25 | rapid growth         |
+| 6  | KR2847        | 26 | moisture sensitivity |
+| 7  | C             | 27 | pilot stage          |
+| 8  | B             | 28 | 30%                  |
+| 9  | B             | 29 | A                    |
+| 10 | C             | 30 | B                    |
+| 11 | 1987          | 31 | systems              |
+| 12 | 340           | 32 | unconscious          |
+| 13 | otters        | 33 | information          |
+| 14 | nesting sites | 34 | perception           |
+| 15 | 4 pm          | 35 | eliminate            |
+| 16 | Saturday      | 36 | B                    |
+| 17 | C             | 37 | B                    |
+| 18 | E             | 38 | B                    |
+| 19 | D             | 39 | confirmation bias    |
+| 20 | F             | 40 | public health        |
 
 ---
 
 ## FULL TAPESCRIPT
 
 > **Formatting notes for audio production:**
+>
 > - Text in square brackets `[pause]` = insert silence (see durations below)
 > - Text in parentheses `(softly)` = delivery note for TTS
 > - `**bold**` = slight emphasis
@@ -50,46 +52,59 @@ This document contains:
 These are read by a neutral announcer voice (use a different voice from all characters).
 
 **INTRO:**
-> You will hear four recordings of native English speakers. After each recording there is time for you to read the questions and check your work. At the end of the test you will have time to transfer your answers.
+
+> This is an IELTS Listening Practice Test. You will hear four recordings and you have to answer questions on them. There will be time for you to read the questions and check your work. All recordings are played only once. The test is in four sections. Now turn to section one.
 
 **BEFORE SECTION 1:**
+
 > Section One. You will hear a conversation between a student and a receptionist at a sports centre. First, you have some time to look at questions one to six. [pause 30 seconds] Now listen carefully and answer questions one to six.
 
 **BETWEEN S1 PART A AND B:**
+
 > Before you hear the rest of the conversation, you have some time to look at questions seven to ten. [pause 20 seconds] Now listen and answer questions seven to ten.
 
 **AFTER SECTION 1:**
+
 > That is the end of Section One. You now have half a minute to check your answers. [pause 30 seconds]
 
 **BEFORE SECTION 2:**
+
 > Section Two. You will hear an audio guide to Greenfield Nature Reserve. First, you have some time to look at questions eleven to sixteen. [pause 30 seconds] Now listen carefully and answer questions eleven to sixteen.
 
 **BETWEEN S2 PART A AND B:**
+
 > Before you hear the rest of the guide, you have some time to look at questions seventeen to twenty. [pause 20 seconds] Now listen and answer questions seventeen to twenty.
 
 **AFTER SECTION 2:**
+
 > That is the end of Section Two. You now have half a minute to check your answers. [pause 30 seconds]
 
 **BEFORE SECTION 3:**
+
 > Section Three. You will hear a discussion between two students, Priya and Marcus, and their tutor, Dr Hartley. First, you have some time to look at questions twenty-one to twenty-four. [pause 30 seconds] Now listen carefully and answer questions twenty-one to twenty-four.
 
 **BETWEEN S3 PART A AND B:**
+
 > Before you hear the rest of the discussion, you have some time to look at questions twenty-five to thirty. [pause 20 seconds] Now listen and answer questions twenty-five to thirty.
 
 **AFTER SECTION 3:**
+
 > That is the end of Section Three. You now have half a minute to check your answers. [pause 30 seconds]
 
 **BEFORE SECTION 4:**
+
 > Section Four. You will hear part of a university lecture on the psychology of decision-making. First, you have some time to look at questions thirty-one to forty. [pause 45 seconds] Now listen carefully and answer questions thirty-one to forty.
 
 **AFTER SECTION 4:**
+
 > That is the end of Section Four. You now have two minutes to check your answers.
 
 ---
 
 ### SECTION 1 TAPESCRIPT
-**Topic:** Booking a sports facility  
-**Speakers:** Emily (student, British female) | Receptionist (British male)  
+
+**Topic:** Booking a sports facility
+**Speakers:** Emily (student, British female) | Receptionist (British male)
 **Target answers embedded in CAPITALS for your reference**
 
 ---
@@ -147,7 +162,8 @@ These are read by a neutral announcer voice (use a different voice from all char
 ---
 
 ### SECTION 2 TAPESCRIPT
-**Topic:** Greenfield Nature Reserve audio guide  
+
+**Topic:** Greenfield Nature Reserve audio guide
 **Speaker:** Guide narrator (Australian female — warm, informative tone)
 
 ---
@@ -164,6 +180,19 @@ Before we move on to describe the layout of the reserve, just a couple of practi
 
 [ANNOUNCER: Before you hear the rest of the guide, you have some time to look at questions seventeen to twenty. pause 20 seconds. Now listen and answer questions seventeen to twenty.]
 
+Now let's talk about the layout of the reserve, so you can plan your visit. As you enter through the main entrance, which is a t the bottom of your map, you'll see the car park immediately to your left.
+
+Continuing ahead from the entrance, the path splits. If you take the left fork, you'll reach the **VISITOR CENTRE**. You can pick up trail maps there, speak to our rangers, and learn more about the reserve's conservation work through our small exhibition.
+
+If instead you take the right fork from the entrance, you'll head towards the pond area. Just past the pond, nestled among the reeds, you'll find our **BIRD HIDE**. It's an excellent spot for observing waterfowl, especially in the early morning.
+
+Further along the main trail, heading south, you'll come to the **PICNIC AREA**. There are benches and tables there, and it's a lovely spot for lunch.
+
+Finally, at the far southern end of the reserve, you'll find the start of our **RIVERSIDE TRAIL**. This trail follows the river for approximately three kilometres and is our most popular route for spotting otters.
+
+We hope you have a wonderful visit. Please remember to take any litter home with you, and enjoy everything Greenfield has to offer.
+
+
 Now let's talk about the layout of the reserve, so you can plan your visit. As you enter through the main entrance — that's marked **A** on your map — you'll see the car park immediately to your left. That's point **B**.
 
 Continuing ahead from the entrance, the path splits. If you take the left fork, you'll reach the **VISITOR CENTRE**, which is point **D** on the map. You can pick up trail maps there, speak to our rangers, and learn more about the reserve's conservation work through our small exhibition.
@@ -179,7 +208,8 @@ We hope you have a wonderful visit. Please remember to take any litter home with
 ---
 
 ### SECTION 3 TAPESCRIPT
-**Topic:** University tutorial — sustainable packaging research  
+
+**Topic:** University tutorial — sustainable packaging research
 **Speakers:** Priya (British Indian female) | Marcus (British male) | Dr Hartley (British male, authoritative but warm)
 
 ---
@@ -208,6 +238,16 @@ We hope you have a wonderful visit. Please remember to take any litter home with
 
 **Priya:** That's a great idea. We can incorporate that into the data collection phase.
 
+**Dr. Hartley:** Which brings us to your project timeline. We are currently in week four, and the final submission is due in week nine. How are you feeling about the schedule, Marcus?
+
+**Marcus:** To be honest, I’m getting a bit anxious. Gathering all the data is going to take weeks. I’m genuinely worried we won't finish the data collection phase in time to actually write up the final report.
+
+**Priya:** Oh, really? I thought if we just split the workload evenly, we'd easily make the deadline.
+
+**Marcus:** I wish I shared your optimism, Priya, but data collection always takes twice as long as you think. I really think we might need to approach the department head to see if a deadline extension is possible, otherwise we'll be rushing the final analysis.
+
+**Dr. Hartley:** Let’s hold off on asking for an extension just yet, Marcus. Let’s see how the next two weeks go first...
+
 [ANNOUNCER: Before you hear the rest of the discussion, you have some time to look at questions twenty-five to thirty. pause 20 seconds. Now listen and answer questions twenty-five to thirty.]
 
 **Dr Hartley:** Now, let's go through the materials you've been reviewing. You've been looking at four alternatives to conventional plastic. Walk me through them.
@@ -222,39 +262,42 @@ We hope you have a wonderful visit. Please remember to take any litter home with
 
 **Dr Hartley:** Good. That's a solid comparative overview. Now, in terms of next steps — what's left to do before submission?
 
-**Priya:** I'll be handling the supplier interviews. I need to finalise the schedule and get those done in the next two weeks. So **PRIYA** is doing the interview schedule.
+**Priya:** I'll be handling the supplier interviews. I need to finalise the schedule and get those done in the next two weeks. 
 
-**Marcus:** And I've agreed to revise the literature review — incorporate those independent sources we talked about. So that falls to **MARCUS**.
+**Marcus:** And I've agreed to revise the literature review — incorporate those independent sources we talked about. 
 
 **Dr Hartley:** Good. I'll review the final draft once you've both made those changes. I think this project has real potential — just needs those adjustments to reach its best.
 
 ---
 
 ### SECTION 4 TAPESCRIPT
-**Topic:** University lecture — the psychology of decision-making  
+
+**Topic:** University lecture — the psychology of decision-making
 **Speaker:** Dr Simone Adler (American female, academic, measured pace)
 
 ---
 
 **Dr Adler:** Good morning, everyone. Today I want to look at what is arguably one of the most influential frameworks in modern psychology: dual-process theory, and specifically what it tells us about how and why we make the decisions we do.
 
-The theory, most famously developed by Daniel Kahneman in his work culminating in the book Thinking, Fast and Slow, proposes that human cognition operates through two distinct **SYSTEMS**. We call them, simply, System 1 and System 2.
+The theory, most famously developed by Daniel Kahneman in his work culminating in the book  *Thinking, Fast and Slow* , proposes that human cognition operates through two distinct **SYSTEMS** [31]. We call them, simply, System 1 and System 2.
 
-System 1 is fast, associative, and largely **UNCONSCIOUS**. It operates automatically — it's the part of your brain that lets you drive a familiar route without consciously planning each turn, or that makes you flinch before you've consciously registered a threat. System 1 is efficient and indispensable, but it is also the source of most of our cognitive biases.
+System 1 is fast, associative, and largely **UNCONSCIOUS** [32]. It operates automatically — it's the part of your brain that lets you drive a familiar route without consciously planning each turn, or that makes you flinch before you've consciously registered a threat. System 1 is efficient and indispensable, but it is also the source of most of our cognitive biases.
 
-System 2, by contrast, is slow, deliberate, and effortful. It's what you use when you're solving a complex maths problem, or carefully evaluating the terms of a contract. The crucial insight — and this is something that has enormous practical implications — is that because System 2 requires **SIGNIFICANTLY MORE COGNITIVE EFFORT AND ENERGY**, we default to System 1 far more often than we might like to think.
+This has been demonstrated across hundreds of experiments. One of the most striking is the anchoring effect. The basic finding is this: when people are exposed to an initial numerical value — even an arbitrary one — that number acts as an anchor, and their subsequent judgements are pulled towards it. People are disproportionately influenced by that first piece of **INFORMATION** [33] they encounter, regardless of its relevance.
 
-This has been demonstrated across hundreds of experiments. One of the most striking is the anchoring effect. The basic finding is this: when people are exposed to an initial numerical value — even an arbitrary one — that number acts as an anchor, and their subsequent judgements are pulled towards it. People are disproportionately influenced by that first piece of **INFORMATION** they encounter, regardless of its relevance.
+Dan Ariely extended this work into consumer behaviour, showing that arbitrary numbers — in his experiments, the last two digits of a social security number — could significantly shift people's **PERCEPTION** [34] of the value of products they were bidding on. Think about what that means for pricing, for negotiation, for any context where numbers appear early in a conversation.
 
-Dan Ariely extended this work into consumer behaviour, showing that arbitrary numbers — in his experiments, the last two digits of a social security number — could significantly shift people's **PERCEPTION** of the value of products they were bidding on. Think about what that means for pricing, for negotiation, for any context where numbers appear early in a conversation.
+Now, you might think: well, if we know about these biases, can't we simply correct for them? The short answer, I'm afraid, is no — not reliably. Research consistently shows that awareness of cognitive biases does not dependably **ELIMINATE** [35] their influence. We can reduce their impact at the margins, with training and deliberate practice, but the underlying processes remain active.
 
-Now, you might think: well, if we know about these biases, can't we simply correct for them? The short answer, I'm afraid, is no — not reliably. Research consistently shows that awareness of cognitive biases does not dependably **ELIMINATE** their influence. We can reduce their impact at the margins, with training and deliberate practice, but the underlying processes remain active.
+System 2, by contrast, is slow, deliberate, and effortful. It's what you use when you're solving a complex maths problem, or carefully evaluating the terms of a contract. The crucial insight — and this is something that has enormous practical implications — is that because System 2 requires **SIGNIFICANTLY MORE COGNITIVE EFFORT AND ENERGY** [36], we default to System 1 far more often than we might like to think.
 
-This brings me to an important applied domain: nudge theory. Developed by Thaler and Sunstein, nudge theory proposes that we can structure environments — what they call 'choice architectures' — in ways that steer people towards better decisions without restricting their freedom of choice. And the evidence suggests it works. But it also raises genuine questions about **INDIVIDUAL AUTONOMY** — if people's choices are being shaped by invisible environmental cues, can those choices be said to be fully their own? It's a debate that has become particularly heated in **PUBLIC HEALTH**, where nudge-based interventions — from cafeteria layout to default enrolment in pension schemes — were among the first and most prominent applications of the theory.
+This brings me to an important applied domain: nudge theory. Developed by Thaler and Sunstein, nudge theory proposes that we can structure environments — what they call 'choice architectures' — in ways that steer people towards better decisions without restricting their freedom of choice. And the evidence suggests it works. But it also raises genuine questions about **INDIVIDUAL AUTONOMY** [37] — if people's choices are being shaped by invisible environmental cues, can those choices be said to be fully their own?
 
-Another bias worth examining in detail is what psychologists call **CONFIRMATION BIAS** — the tendency to seek out, favour, and more easily recall information that supports our existing beliefs, while unconsciously discounting evidence that contradicts them. This is not a minor quirk. Confirmation bias has been implicated in everything from wrongful convictions in criminal justice to catastrophic failures of financial forecasting.
+So where does this leave us? My view — and this is reflected in a growing consensus in the field — is that the most productive direction for future research is not simply documenting more biases, interesting as that is, but rather developing robust, evidence-based **TRAINING PROGRAMMES** [38] that help individuals and institutions strengthen System 2 thinking in high-stakes contexts. That's where the real practical value lies.
 
-So where does this leave us? My view — and this is reflected in a growing consensus in the field — is that the most productive direction for future research is not simply documenting more biases, interesting as that is, but rather developing robust, evidence-based **TRAINING PROGRAMMES** that help individuals and institutions strengthen System 2 thinking in high-stakes contexts. That's where the real practical value lies.
+Another bias worth examining in detail is what psychologists call **CONFIRMATION BIAS** [39] — the tendency to seek out, favour, and more easily recall information that supports our existing beliefs, while unconsciously discounting evidence that contradicts them. This is not a minor quirk. Confirmation bias has been implicated in everything from wrongful convictions in criminal justice to catastrophic failures of financial forecasting.
+
+Returning to the debate surrounding nudge theory, it has become particularly heated in **PUBLIC HEALTH** [40], where nudge-based interventions — from cafeteria layout to default enrolment in pension schemes — were among the first and most prominent applications of the theory.
 
 We'll pick up on that thread next week, when we look at some specific intervention programmes and ask what the evidence actually says about their effectiveness. Thank you.
 
@@ -283,20 +326,21 @@ You will generate one MP3 audio clip per speaker turn using ElevenLabs, then sti
 
 Assign one voice per named character. Recommended ElevenLabs voices (as of 2025):
 
-| Character | Voice to use | Notes |
-|---|---|---|
-| Announcer | **Bill** or **Callum** | Neutral, clear British male |
-| Receptionist (S1) | **Harry** | Natural British male |
-| Emily (S1) | **Charlotte** | British female, natural |
-| Narrator (S2) | **Nicole** | Clear, warm female; set to Australian if available |
-| Dr Hartley (S3) | **George** | British male, authoritative |
-| Priya (S3) | **Freya** | British female |
-| Marcus (S3) | **Charlie** | British male, younger |
-| Dr Adler (S4) | **Rachel** or **Aria** | American female, academic |
+| Character         | Voice to use                       | Notes                                              |
+| ----------------- | ---------------------------------- | -------------------------------------------------- |
+| Announcer         | **Bill** or **Callum** | Neutral, clear British male                        |
+| Receptionist (S1) | **Harry**                    | Natural British male                               |
+| Emily (S1)        | **Charlotte**                | British female, natural                            |
+| Narrator (S2)     | **Nicole**                   | Clear, warm female; set to Australian if available |
+| Dr Hartley (S3)   | **George**                   | British male, authoritative                        |
+| Priya (S3)        | **Freya**                    | British female                                     |
+| Marcus (S3)       | **Charlie**                  | British male, younger                              |
+| Dr Adler (S4)     | **Rachel** or **Aria** | American female, academic                          |
 
 > You can preview any voice by clicking the play button next to the name in the Voice Library.
 
 **Settings to use for all voices:**
+
 - Stability: **55–65%**
 - Clarity + Similarity: **75–80%**
 - Style exaggeration: **20–30%**
@@ -327,12 +371,12 @@ s4_adr_01.mp3   ← Section 4, Dr Adler, clip 01
 
 **Clips to generate for each section:**
 
-| Section | Clips |
-|---|---|
-| S1 | 1 announcer clip (intro) + ~20 speaker turns + 1 announcer mid-section + 1 announcer end |
-| S2 | 1 announcer clip (intro) + 1 long narrator clip (split into 2 parts) + 1 announcer mid-section + 1 announcer end |
-| S3 | 1 announcer clip + ~22 speaker turns + 1 announcer mid-section + 1 announcer end |
-| S4 | 1 announcer clip + 1 long lecturer clip (split into 4–5 parts) + 1 announcer end |
+| Section | Clips                                                                                                            |
+| ------- | ---------------------------------------------------------------------------------------------------------------- |
+| S1      | 1 announcer clip (intro) + ~20 speaker turns + 1 announcer mid-section + 1 announcer end                         |
+| S2      | 1 announcer clip (intro) + 1 long narrator clip (split into 2 parts) + 1 announcer mid-section + 1 announcer end |
+| S3      | 1 announcer clip + ~22 speaker turns + 1 announcer mid-section + 1 announcer end                                 |
+| S4      | 1 announcer clip + 1 long lecturer clip (split into 4–5 parts) + 1 announcer end                                |
 
 > **Tip:** ElevenLabs has a 5,000 character limit per generation. For long monologues (S2, S4), split the text at natural paragraph breaks and generate multiple clips.
 
@@ -351,12 +395,14 @@ pip install pydub
 4. Install FFmpeg (required by pydub to handle MP3 files):
 
 **Mac (using Homebrew):**
+
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew install ffmpeg
 ```
 
 **Windows:**
+
 - Download from https://ffmpeg.org/download.html
 - Extract to `C:\ffmpeg\`
 - Add `C:\ffmpeg\bin` to your system PATH (search "environment variables" in Start menu)
@@ -581,20 +627,25 @@ if __name__ == "__main__":
 ### Troubleshooting
 
 **"FileNotFoundError" for FFmpeg:**
+
 - Mac: run `brew install ffmpeg` in Terminal.
 - Windows: ensure `ffmpeg.exe` is in your system PATH.
 
 **"ModuleNotFoundError: No module named 'pydub'":**
+
 - Run `pip install pydub` (or `pip3 install pydub` on Mac).
 
 **Audio clip sounds robotic:**
+
 - Lower the Stability slider in ElevenLabs (try 45–55%).
 - Try a different voice model: **Eleven Turbo v2.5** often sounds more natural for conversational turns.
 
 **ElevenLabs character limit reached:**
+
 - Split long turns into shorter sentences and generate separately.
 - Consider upgrading to Starter ($5/month).
 
 **File naming mismatch:**
+
 - Edit the `CLIP_SEQUENCE` list in the script to exactly match your filenames.
 - Filenames are case-sensitive on Mac/Linux.

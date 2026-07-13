@@ -61,10 +61,12 @@ async function init() {
   timerSecondsMax = timerSeconds;
   tbTitle.textContent = TEST.title || "IELTS Listening";
 
+  // Timer is hidden until the 2-min transfer phase begins
+  timerDisplay.classList.add("hidden");
+
   buildSectionTabs();
   renderSection(0);
   buildReviewPanel();
-  startTimer();
   initAudio();
 
   simTopbar.classList.remove("hidden");
@@ -180,6 +182,7 @@ function beginTransferPhase() {
   clearInterval(timerInterval);
   clearInterval(sessionPollInterval);
 
+  timerDisplay.classList.remove("hidden");
   timerDisplay.classList.remove("warn");
   timerDisplay.classList.add("transfer");
 
@@ -738,19 +741,22 @@ function showResults() {
     const tbody = document.createElement("tbody");
 
     (sec.questions || []).forEach(q => {
-      const userAns    = (answers[q.id] ?? "").toString().trim().toLowerCase();
-      const correctAns = (q.answer ?? "").toString().trim().toLowerCase();
-      const isCorrect  = userAns === correctAns;
+      const userAns  = (answers[q.id] ?? "").toString().trim().toLowerCase();
+      const accepted = [q.answer, ...(q.altAnswers || [])]
+        .map(a => (a ?? "").toString().trim().toLowerCase())
+        .filter(Boolean);
+      const isCorrect = accepted.length > 0 && accepted.includes(userAns);
       if (isCorrect) correct++;
 
-      questionResults.push({ id: q.id, stem: q.stem || "", correct: isCorrect, given: answers[q.id] ?? "", expected: q.answer ?? "" });
+      const expectedDisplay = accepted.join(" / ");
+      questionResults.push({ id: q.id, stem: q.stem || "", correct: isCorrect, given: answers[q.id] ?? "", expected: expectedDisplay });
 
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${q.id}</td>
         <td style="max-width:280px;">${escHtml(q.stem || "")}</td>
         <td class="${isCorrect ? "your-answer-correct" : "your-answer-wrong"}">${escHtml(String(answers[q.id] ?? "—"))}</td>
-        <td>${escHtml(String(q.answer ?? ""))}</td>
+        <td>${escHtml(expectedDisplay)}</td>
         <td>${isCorrect ? '<span class="correct-mark">✓ Correct</span>' : '<span class="incorrect-mark">✗ Incorrect</span>'}</td>
       `;
       tbody.appendChild(tr);

@@ -123,23 +123,26 @@ async function loadTestList() {
   allTestsCache.forEach(test => {
     const qCount = (test.sections || []).reduce((s, sec) => s + (sec.questions || []).length, 0);
     const modeLabel = (test.audioMode === "browser") ? "In-browser audio" : "Teacher plays audio";
+    const isHidden = !!test.hidden;
     const item = document.createElement("div");
-    item.className = "test-list-item";
+    item.className = "test-list-item" + (isHidden ? " test-list-item--hidden" : "");
     item.innerHTML = `
       <div>
-        <div class="item-title">${escHtml(test.title || "Untitled")}</div>
+        <div class="item-title">${escHtml(test.title || "Untitled")}${isHidden ? ' <span class="test-hidden-badge">Hidden</span>' : ""}</div>
         <div class="item-meta">${(test.sections||[]).length} sections &nbsp;·&nbsp; ${qCount} questions &nbsp;·&nbsp; ${test.timeLimit||30} min &nbsp;·&nbsp; ${escHtml(modeLabel)}</div>
       </div>
       <div class="item-actions">
+        <button class="btn btn-ghost btn-sm" data-action="toggle-hidden" data-id="${test.id}">${isHidden ? "Show" : "Hide"}</button>
         <button class="btn btn-ghost btn-sm" data-action="clone"  data-id="${test.id}">Clone</button>
         <button class="btn btn-ghost btn-sm" data-action="export" data-id="${test.id}">Export</button>
         <button class="btn btn-ghost btn-sm" data-action="edit"   data-id="${test.id}">Edit</button>
         <button class="btn btn-danger btn-sm" data-action="delete" data-id="${test.id}">Delete</button>
       </div>`;
-    item.querySelector("[data-action='edit']").addEventListener("click",   () => openEditor(test.id));
-    item.querySelector("[data-action='delete']").addEventListener("click", () => confirmDeleteTest(test.id));
-    item.querySelector("[data-action='clone']").addEventListener("click",  () => cloneTest(test));
-    item.querySelector("[data-action='export']").addEventListener("click", () => exportTestAsJson(test));
+    item.querySelector("[data-action='edit']").addEventListener("click",          () => openEditor(test.id));
+    item.querySelector("[data-action='delete']").addEventListener("click",        () => confirmDeleteTest(test.id));
+    item.querySelector("[data-action='clone']").addEventListener("click",         () => cloneTest(test));
+    item.querySelector("[data-action='export']").addEventListener("click",        () => exportTestAsJson(test));
+    item.querySelector("[data-action='toggle-hidden']").addEventListener("click", () => toggleTestVisibility(test));
     testList.appendChild(item);
   });
 }
@@ -152,6 +155,13 @@ async function cloneTest(test) {
     await saveTest({ ...data, title: (data.title || "Untitled") + " (Copy)" });
     loadTestList();
   } catch (err) { alert("Clone failed: " + err.message); }
+}
+
+async function toggleTestVisibility(test) {
+  try {
+    await saveTest({ ...test, hidden: !test.hidden });
+    loadTestList();
+  } catch (err) { alert("Could not update visibility: " + err.message); }
 }
 
 function exportTestAsJson(test) {
@@ -456,6 +466,20 @@ function buildQuestionBlock(q) {
         <input type="text" class="qe-answer" value="${escHtml(q.answer || "")}" placeholder="Exact accepted answer (lowercase)" />
         <div class="form-hint">For MCQ/matching: the letter (A, B, C). For text inputs: the expected word(s) in lowercase.</div>
       </div>
+      <div class="form-group">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <label style="margin:0;">Additional Accepted Answers</label>
+          <button type="button" class="btn btn-ghost btn-sm qe-add-alt">+ Add alternative</button>
+        </div>
+        <div class="alt-answers-list qe-alt-list">
+          ${(q.altAnswers || []).map(a => `
+            <div class="alt-answer-row">
+              <input type="text" class="qe-alt-answer" value="${escHtml(a)}" placeholder="Alternative accepted answer (lowercase)" />
+              <button type="button" class="btn btn-ghost btn-sm alt-remove" title="Remove">✕</button>
+            </div>`).join("")}
+        </div>
+        <div class="form-hint">Any of these will be accepted as correct. Leave blank rows will be ignored.</div>
+      </div>
       <div class="qe-extra-fields"></div>
     </div>`;
 
@@ -467,6 +491,20 @@ function buildQuestionBlock(q) {
   block.querySelector(".qe-stem").addEventListener("input", e => {
     const text = e.target.value.slice(0, 55) + (e.target.value.length > 55 ? "…" : "");
     block.querySelector("summary").textContent = `Q${block.querySelector(".qe-id").value}: ${text}`;
+  });
+
+  block.querySelector(".qe-add-alt").addEventListener("click", () => {
+    const row = document.createElement("div");
+    row.className = "alt-answer-row";
+    row.innerHTML = `<input type="text" class="qe-alt-answer" placeholder="Alternative accepted answer (lowercase)" />
+                     <button type="button" class="btn btn-ghost btn-sm alt-remove" title="Remove">✕</button>`;
+    row.querySelector(".alt-remove").addEventListener("click", () => row.remove());
+    block.querySelector(".qe-alt-list").appendChild(row);
+    row.querySelector("input").focus();
+  });
+
+  block.querySelectorAll(".alt-answer-row .alt-remove").forEach(btn => {
+    btn.addEventListener("click", () => btn.closest(".alt-answer-row").remove());
   });
 
   return block;
@@ -555,6 +593,13 @@ function collectFormData() {
         stem:   qblock.querySelector(".qe-stem").value.trim(),
         answer: qblock.querySelector(".qe-answer").value.trim()
       };
+
+      const altAnswers = [];
+      qblock.querySelectorAll(".qe-alt-answer").forEach(inp => {
+        const v = inp.value.trim();
+        if (v) altAnswers.push(v);
+      });
+      if (altAnswers.length) q.altAnswers = altAnswers;
 
       if (type === "form_completion" || type === "note_completion") {
         const label = qblock.querySelector(".qe-formlabel")?.value.trim() || "";
