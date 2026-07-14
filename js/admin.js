@@ -339,6 +339,7 @@ async function openEditor(id) {
   document.getElementById("audio-url-group").classList.toggle("hidden", (currentTestData.audioMode || "teacher") !== "browser");
   renderSectionsEditor();
   document.getElementById("btn-delete-test").classList.toggle("hidden", !id);
+  document.getElementById("btn-regrade-all").classList.toggle("hidden", !id);
   document.getElementById("save-msg").classList.add("hidden");
 }
 
@@ -355,6 +356,8 @@ function backToList() {
 document.getElementById("btn-delete-test").addEventListener("click", () => {
   if (currentTestData?.id) confirmDeleteTest(currentTestData.id);
 });
+
+document.getElementById("btn-regrade-all").addEventListener("click", regradeAllForTest);
 
 document.getElementById("btn-save-test").addEventListener("click", saveCurrentTest);
 document.getElementById("btn-save-test-bottom").addEventListener("click", saveCurrentTest);
@@ -715,8 +718,7 @@ function renderResultsTable() {
       <td>${escHtml(r.timeTaken || "—")}</td>
       <td><span class="score-pill">${r.score??'?'}/${r.totalQuestions??40}</span></td>
       <td><span class="band-pill">${r.bandEstimate??'—'}</span></td>
-      <td style="white-space:nowrap;">
-        <button class="btn btn-ghost btn-sm result-regrade-btn">Re-grade</button>
+      <td>
         <button class="btn btn-danger btn-sm result-del-btn" data-id="${r.id}">Delete</button>
       </td>
     `;
@@ -727,7 +729,6 @@ function renderResultsTable() {
       if (existing?.classList.contains("result-detail-row")) { existing.remove(); btn.textContent = "▶"; }
       else { btn.textContent = "▼"; tr.insertAdjacentElement("afterend", buildDetailRow(r)); }
     });
-    tr.querySelector(".result-regrade-btn").addEventListener("click", () => regradeResult(r));
     tr.querySelector(".result-del-btn").addEventListener("click", () => confirmDeleteResult(r.id));
     tbody.appendChild(tr);
   });
@@ -771,52 +772,60 @@ document.getElementById("btn-clear-filters").addEventListener("click", () => {
 });
 document.getElementById("btn-refresh-results").addEventListener("click", loadResultsDashboard);
 
-// ── Re-grade ───────────────────────────────────────────────────
-async function regradeResult(r) {
-  let test;
-  try {
-    test = await getTest(r.testId);
-  } catch (e) {
-    alert("Could not load the test for re-grading: " + e.message);
-    return;
-  }
+// ── Re-grade all results for the current test ──────────────────
+async function regradeAllForTest() {
+  if (!currentTestData?.id) return;
 
-  const storedAnswers = r.answers || {};
-  let correct = 0;
-  const questionResults = [];
-
-  (test.sections || []).forEach(sec => {
-    (sec.questions || []).forEach(q => {
-      const userAns  = (storedAnswers[q.id] ?? "").toString().trim().toLowerCase();
-      const accepted = [q.answer, ...(q.altAnswers || [])]
-        .map(a => (a ?? "").toString().trim().toLowerCase())
-        .filter(Boolean);
-      const isCorrect = accepted.length > 0 && accepted.includes(userAns);
-      if (isCorrect) correct++;
-      questionResults.push({
-        id: q.id,
-        stem: q.stem || "",
-        correct: isCorrect,
-        given: storedAnswers[q.id] ?? "",
-        expected: accepted.join(" / ")
-      });
-    });
-  });
-
-  const total       = questionResults.length;
-  const bandEstimate = getBandScore(correct);
+  const msg = document.getElementById("save-msg");
+  const btn = document.getElementById("btn-regrade-all");
+  btn.disabled = true;
+  btn.textContent = "Re-grading…";
 
   try {
-    await updateResult(r.id, { score: correct, totalQuestions: total, bandEstimate, questionResults });
-    // Update local cache
-    const idx = allResultsCache.findIndex(x => x.id === r.id);
-    if (idx !== -1) {
-      allResultsCache[idx] = { ...allResultsCache[idx], score: correct, totalQuestions: total, bandEstimate, questionResults };
+    // Fetch all results and filter to this test
+    const allResults = await getAllResults();
+    const matching   = allResults.filter(r => r.testId === currentTestData.id);
+
+    if (!matching.length) {
+      showMsg(msg, "No submitted results found for this test.");
+      return;
     }
-    renderResultsTable();
-    alert(`Re-graded: ${r.studentName} — ${correct}/${total} (Band ${bandEstimate})`);
+
+    // Re-grade each result against the current answer key
+    await Promise.all(matching.map(r => {
+      const storedAnswers = r.answers || {};
+      let correct = 0;
+      const questionResults = [];
+
+      (currentTestData.sections || []).forEach(sec => {
+        (sec.questions || []).forEach(q => {
+          const userAns  = (storedAnswers[q.id] ?? "").toString().trim().toLowerCase();
+          const accepted = [q.answer, ...(q.altAnswers || [])]
+            .map(a => (a ?? "").toString().trim().toLowerCase())
+            .filter(Boolean);
+          const isCorrect = accepted.length > 0 && accepted.includes(userAns);
+          if (isCorrect) correct++;
+          questionResults.push({
+            id: q.id,
+            stem: q.stem || "",
+            correct: isCorrect,
+            given: storedAnswers[q.id] ?? "",
+            expected: accepted.join(" / ")
+          });
+        });
+      });
+
+      const total        = questionResults.length;
+      const bandEstimate = getBandScore(correct);
+      return updateResult(r.id, { score: correct, totalQuestions: total, bandEstimate, questionResults });
+    }));
+
+    showMsg(msg, `Re-graded ${matching.length} result${matching.length !== 1 ? "s" : ""} successfully.`);
   } catch (e) {
-    alert("Failed to save re-graded result: " + e.message);
+    showMsg(msg, "Re-grade failed: " + e.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Re-grade All Results";
   }
 }
 
