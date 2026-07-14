@@ -5,8 +5,7 @@
 import {
   getAllTests, getTest, saveTest, deleteTest,
   getConfig, saveConfig,
-  getAllResults, deleteResult,
-  startTransferPhase, triggerForceSubmit
+  getAllResults, deleteResult, updateResult
 } from "./db.js";
 
 // ── State ──────────────────────────────────────────────────────
@@ -28,7 +27,6 @@ const testList      = document.getElementById("test-list");
 const adminEmpty    = document.getElementById("admin-empty");
 const testEditor    = document.getElementById("test-editor");
 const tabTests      = document.getElementById("tab-tests");
-const tabLive       = document.getElementById("tab-live");
 const tabResults    = document.getElementById("tab-results");
 const tabSettings   = document.getElementById("tab-settings");
 
@@ -43,6 +41,24 @@ async function init() {
   pwInput.focus();
 }
 
+// ── Band score (mirrors simulator.js) ─────────────────────────
+function getBandScore(correct) {
+  if (correct >= 39) return 9.0;
+  if (correct >= 37) return 8.5;
+  if (correct >= 35) return 8.0;
+  if (correct >= 32) return 7.5;
+  if (correct >= 30) return 7.0;
+  if (correct >= 26) return 6.5;
+  if (correct >= 23) return 6.0;
+  if (correct >= 18) return 5.5;
+  if (correct >= 16) return 5.0;
+  if (correct >= 13) return 4.5;
+  if (correct >= 10) return 4.0;
+  if (correct >= 8)  return 3.5;
+  if (correct >= 6)  return 3.0;
+  return 2.5;
+}
+
 // ── Password ───────────────────────────────────────────────────
 pwInput.addEventListener("keydown", e => { if (e.key === "Enter") pwSubmit.click(); });
 pwSubmit.addEventListener("click", () => {
@@ -51,7 +67,6 @@ pwSubmit.addEventListener("click", () => {
     passwordGate.classList.add("hidden");
     adminPage.classList.remove("hidden");
     loadTestList();
-    loadLiveTestSelect();
     loadSettingsPanel();
   } else {
     pwError.classList.remove("hidden");
@@ -70,12 +85,10 @@ document.getElementById("btn-logout").addEventListener("click", () => {
 function showTab(tab) {
   document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
   tabTests.classList.toggle("hidden",    tab !== "tests");
-  tabLive.classList.toggle("hidden",     tab !== "live");
   tabResults.classList.toggle("hidden",  tab !== "results");
   tabSettings.classList.toggle("hidden", tab !== "settings");
   testEditor.classList.add("hidden");
   if (tab === "results") loadResultsDashboard();
-  if (tab === "live")    loadLiveTestSelect();
 }
 
 document.querySelectorAll(".tab-btn").forEach(btn => {
@@ -630,45 +643,6 @@ function collectFormData() {
   });
 }
 
-// ── Live Control ───────────────────────────────────────────────
-async function loadLiveTestSelect() {
-  try {
-    if (!allTestsCache.length) allTestsCache = await getAllTests();
-    const sel = document.getElementById("live-test-select");
-    sel.innerHTML = `<option value="">— Select a test —</option>`;
-    allTestsCache.forEach(t => {
-      const opt = document.createElement("option");
-      opt.value = t.id;
-      opt.textContent = t.title || "Untitled";
-      sel.appendChild(opt);
-    });
-  } catch (e) { console.warn("Could not load tests for live control:", e); }
-}
-
-document.getElementById("btn-start-transfer").addEventListener("click", async () => {
-  const testId = document.getElementById("live-test-select").value;
-  const msg    = document.getElementById("live-msg");
-  if (!testId) { showMsg(msg, "Please select a test first.", true); return; }
-  try {
-    await startTransferPhase(testId);
-    showMsg(msg, "Transfer phase started. Students will see the 2-minute countdown.");
-  } catch (e) {
-    showMsg(msg, "Error: " + e.message, true);
-  }
-});
-
-document.getElementById("btn-force-submit").addEventListener("click", async () => {
-  const testId = document.getElementById("live-test-select").value;
-  const msg    = document.getElementById("live-msg");
-  if (!testId) { showMsg(msg, "Please select a test first.", true); return; }
-  if (!confirm("Force-submit all active sessions? This cannot be undone.")) return;
-  try {
-    await triggerForceSubmit(testId);
-    showMsg(msg, "Force submit triggered. All students will be submitted immediately.");
-  } catch (e) {
-    showMsg(msg, "Error: " + e.message, true);
-  }
-});
 
 // ── Results dashboard ──────────────────────────────────────────
 async function loadResultsDashboard() {
@@ -741,7 +715,10 @@ function renderResultsTable() {
       <td>${escHtml(r.timeTaken || "—")}</td>
       <td><span class="score-pill">${r.score??'?'}/${r.totalQuestions??40}</span></td>
       <td><span class="band-pill">${r.bandEstimate??'—'}</span></td>
-      <td><button class="btn btn-danger btn-sm result-del-btn" data-id="${r.id}">Delete</button></td>
+      <td style="white-space:nowrap;">
+        <button class="btn btn-ghost btn-sm result-regrade-btn">Re-grade</button>
+        <button class="btn btn-danger btn-sm result-del-btn" data-id="${r.id}">Delete</button>
+      </td>
     `;
 
     tr.querySelector(".result-expand-btn").addEventListener("click", e => {
@@ -750,6 +727,7 @@ function renderResultsTable() {
       if (existing?.classList.contains("result-detail-row")) { existing.remove(); btn.textContent = "▶"; }
       else { btn.textContent = "▼"; tr.insertAdjacentElement("afterend", buildDetailRow(r)); }
     });
+    tr.querySelector(".result-regrade-btn").addEventListener("click", () => regradeResult(r));
     tr.querySelector(".result-del-btn").addEventListener("click", () => confirmDeleteResult(r.id));
     tbody.appendChild(tr);
   });
@@ -792,6 +770,55 @@ document.getElementById("btn-clear-filters").addEventListener("click", () => {
   renderResultsTable();
 });
 document.getElementById("btn-refresh-results").addEventListener("click", loadResultsDashboard);
+
+// ── Re-grade ───────────────────────────────────────────────────
+async function regradeResult(r) {
+  let test;
+  try {
+    test = await getTest(r.testId);
+  } catch (e) {
+    alert("Could not load the test for re-grading: " + e.message);
+    return;
+  }
+
+  const storedAnswers = r.answers || {};
+  let correct = 0;
+  const questionResults = [];
+
+  (test.sections || []).forEach(sec => {
+    (sec.questions || []).forEach(q => {
+      const userAns  = (storedAnswers[q.id] ?? "").toString().trim().toLowerCase();
+      const accepted = [q.answer, ...(q.altAnswers || [])]
+        .map(a => (a ?? "").toString().trim().toLowerCase())
+        .filter(Boolean);
+      const isCorrect = accepted.length > 0 && accepted.includes(userAns);
+      if (isCorrect) correct++;
+      questionResults.push({
+        id: q.id,
+        stem: q.stem || "",
+        correct: isCorrect,
+        given: storedAnswers[q.id] ?? "",
+        expected: accepted.join(" / ")
+      });
+    });
+  });
+
+  const total       = questionResults.length;
+  const bandEstimate = getBandScore(correct);
+
+  try {
+    await updateResult(r.id, { score: correct, totalQuestions: total, bandEstimate, questionResults });
+    // Update local cache
+    const idx = allResultsCache.findIndex(x => x.id === r.id);
+    if (idx !== -1) {
+      allResultsCache[idx] = { ...allResultsCache[idx], score: correct, totalQuestions: total, bandEstimate, questionResults };
+    }
+    renderResultsTable();
+    alert(`Re-graded: ${r.studentName} — ${correct}/${total} (Band ${bandEstimate})`);
+  } catch (e) {
+    alert("Failed to save re-graded result: " + e.message);
+  }
+}
 
 // ── Delete result ──────────────────────────────────────────────
 const deleteResultModal = document.getElementById("delete-result-modal");

@@ -45,7 +45,6 @@
       <!-- Tab bar -->
       <div class="tab-bar">
         <button class="tab-btn active" data-tab="tests">Tests</button>
-        <button class="tab-btn"        data-tab="live">Live Control</button>
         <button class="tab-btn"        data-tab="results">Results</button>
         <button class="tab-btn"        data-tab="settings">Settings</button>
       </div>
@@ -122,34 +121,6 @@
         <div id="save-msg-bottom" class="hidden" style="font-size:0.88rem;margin-top:10px;text-align:right;"></div>
       </div>
 
-      <!-- ── LIVE CONTROL TAB ───────────────────────────── -->
-      <div id="tab-live" class="hidden">
-        <h2>Live Control — Teacher Play Mode</h2>
-        <p style="color:var(--text-muted);font-size:0.92rem;margin-bottom:24px;">
-          Use this panel when students are taking a test and you are playing the audio via room speaker.
-          After the audio ends, click the button below to start the 2-minute transfer/checking phase on all students' screens simultaneously.
-        </p>
-
-        <div class="live-control-panel" id="live-control-area">
-          <h3>Select the active test</h3>
-          <div class="form-group" style="max-width:480px;">
-            <label for="live-test-select">Test</label>
-            <select id="live-test-select">
-              <option value="">— Select a test —</option>
-            </select>
-          </div>
-          <div class="live-control-actions">
-            <button class="btn btn-primary" id="btn-start-transfer">Start 2-min Transfer Time</button>
-            <button class="btn btn-danger"  id="btn-force-submit">Force Submit All</button>
-          </div>
-          <div id="live-msg" class="hidden" style="font-size:0.88rem;margin-top:12px;"></div>
-          <p style="font-size:0.82rem;color:#7c5400;margin-top:14px;">
-            <strong>Force Submit All</strong> — immediately submits all students' tests regardless of whether the transfer phase has ended.
-            Use only if necessary.
-          </p>
-        </div>
-      </div>
-
       <!-- ── RESULTS TAB ────────────────────────────────── -->
       <div id="tab-results" class="hidden">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
@@ -175,7 +146,7 @@
               <th style="width:36px;"></th>
               <th>Name</th><th>Class</th><th>Test</th>
               <th>Date &amp; Time</th><th>Time Taken</th>
-              <th>Score</th><th>Band</th><th></th>
+              <th>Score</th><th>Band</th><th style="min-width:130px;"></th>
             </tr></thead>
             <tbody id="results-tbody-admin"></tbody>
           </table>

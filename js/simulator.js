@@ -2,7 +2,7 @@
 // IELTS LISTENING CBT SIMULATOR — Main Logic
 // =============================================================
 
-import { getTest, saveResult, getSession } from "./db.js";
+import { getTest, saveResult } from "./db.js";
 
 // ── State ──────────────────────────────────────────────────────
 let TEST              = null;
@@ -17,7 +17,6 @@ let resultSaved       = false;
 let transferActive    = false;
 let transferSeconds   = 120;       // 2-minute transfer/checking phase
 let transferInterval  = null;
-let sessionPollInterval = null;    // teacher-mode polling
 
 // ── DOM refs ───────────────────────────────────────────────────
 const loading           = document.getElementById("loading");
@@ -141,54 +140,18 @@ function initAudio() {
     });
 
   } else {
-    // Teacher-play mode: poll Firestore for transfer start signal
+    // Teacher-play mode: no automatic timers — students submit manually when done.
     audioStatusText.textContent = "Your teacher will play the audio. Answer as you listen.";
     audioIcon.textContent = "🔊";
-    startSessionPolling();
   }
 }
 
-// ── Teacher-mode session polling ────────────────────────────────
-function startSessionPolling() {
-  const testId = sessionStorage.getItem("activeTestId");
-  if (!testId) return;
-
-  // Record the moment polling begins so we can ignore stale Firestore signals
-  // from previous exam sittings that were never cleared.
-  const pollStartTime = Date.now();
-
-  sessionPollInterval = setInterval(async () => {
-    try {
-      const session = await getSession(testId);
-      if (!session) return;
-
-      if (session.forceSubmit) {
-        const signalTime = session.forceSubmitAt?.toMillis?.() ?? 0;
-        if (signalTime < pollStartTime) return;   // stale — ignore
-        clearInterval(sessionPollInterval);
-        clearInterval(timerInterval);
-        doSubmit();
-        return;
-      }
-
-      if (session.transferStarted && !transferActive) {
-        const signalTime = session.transferStartedAt?.toMillis?.() ?? 0;
-        if (signalTime < pollStartTime) return;   // stale — ignore
-        clearInterval(sessionPollInterval);
-        beginTransferPhase();
-      }
-    } catch (e) {
-      // Network error — silently retry next poll
-    }
-  }, 3000);
-}
 
 // ── Transfer / checking phase ──────────────────────────────────
 function beginTransferPhase() {
   if (transferActive) return;
   transferActive = true;
   clearInterval(timerInterval);
-  clearInterval(sessionPollInterval);
 
   timerDisplay.classList.remove("hidden");
   timerDisplay.classList.remove("warn");
@@ -710,7 +673,6 @@ submitConfirm.addEventListener("click", () => {
   submitModalOverlay.classList.add("hidden");
   clearInterval(timerInterval);
   clearInterval(transferInterval);
-  clearInterval(sessionPollInterval);
   doSubmit();
 });
 

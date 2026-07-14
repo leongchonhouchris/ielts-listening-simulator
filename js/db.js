@@ -6,20 +6,17 @@
 //   results           — student submission results (shared with reading sim;
 //                       distinguished by testType: "listening")
 //   config            — admin password, class list (shared with reading sim)
-//   listening_sessions — live session state for teacher-play mode
 // =============================================================
 
 import {
   db, collection, doc,
-  getDocs, getDoc, setDoc, deleteDoc, addDoc,
-  serverTimestamp
+  getDocs, getDoc, setDoc, deleteDoc, addDoc
 } from "./firebase-config.js";
 
 const TESTS_COL    = "listening_tests";
 const RESULTS_COL  = "results";
 const CONFIG_COL   = "config";
 const CONFIG_DOC   = "settings";
-const SESSIONS_COL = "listening_sessions";
 
 // ── Tests ──────────────────────────────────────────────────────
 export async function getAllTests() {
@@ -68,6 +65,10 @@ export async function deleteResult(id) {
   await deleteDoc(doc(db, RESULTS_COL, id));
 }
 
+export async function updateResult(id, data) {
+  await setDoc(doc(db, RESULTS_COL, id), data, { merge: true });
+}
+
 // ── Config ─────────────────────────────────────────────────────
 export async function getConfig() {
   const snap = await getDoc(doc(db, CONFIG_COL, CONFIG_DOC));
@@ -87,39 +88,7 @@ export async function seedIfEmpty(sampleTest) {
   const snap = await getDocs(collection(db, TESTS_COL));
   if (snap.empty) {
     await addDoc(collection(db, TESTS_COL), sampleTest);
-    console.log("Seeded Firestore with sample listening test.");
+  console.log("Seeded Firestore with sample listening test.");
   }
 }
 
-// ── Live sessions (teacher-play mode) ─────────────────────────
-// A session document tracks whether the 2-min transfer phase has started.
-// Students poll this every 3 seconds.
-// Doc ID = testId (one active session per test at a time)
-
-export async function getSession(testId) {
-  const snap = await getDoc(doc(db, SESSIONS_COL, testId));
-  if (!snap.exists()) return null;
-  return { id: snap.id, ...snap.data() };
-}
-
-export async function startTransferPhase(testId) {
-  await setDoc(doc(db, SESSIONS_COL, testId), {
-    testId,
-    transferStarted: true,
-    transferStartedAt: serverTimestamp(),
-    forceSubmit: false
-  });
-}
-
-export async function triggerForceSubmit(testId) {
-  await setDoc(doc(db, SESSIONS_COL, testId), {
-    testId,
-    transferStarted: true,
-    forceSubmit: true,
-    forceSubmitAt: serverTimestamp()
-  }, { merge: true });
-}
-
-export async function clearSession(testId) {
-  await deleteDoc(doc(db, SESSIONS_COL, testId));
-}
